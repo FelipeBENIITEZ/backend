@@ -1,25 +1,20 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Navigation } from "./components/Navigation";
-import { Inscripciones_form } from "./paginas/Inscripciones_form";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Inscripciones_list } from "./paginas/Inscripciones_list";
-import { Toaster } from "react-hot-toast";
-import axios from 'axios';
-axios.defaults.withCredentials = true;
+import { Inscripciones_form } from "./paginas/Inscripciones_form";
+import Navigation from "./components/Navigation";
+
 function App() {
   return (
-    <BrowserRouter>
-      <div className="container mx-auto">
-        <Navigation />
-        <Routes>
-          {/* redirect to tasks */}
-          <Route path="/" element={<Navigate to="/Inscripciones" />} />
-          <Route path="/Inscripciones" element={<Inscripciones_list />} />
-          <Route path="/Inscripciones/:id" element={<Inscripciones_form />} />
-          <Route path="/Inscripciones-create" element={<Inscripciones_form />} />
-        </Routes>
-        <Toaster />
-      </div>
-    </BrowserRouter>
+    <Router>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Inscripciones_list />} />
+        <Route path="/Inscripciones" element={<Inscripciones_list />} />
+        <Route path="/Inscripcion-create" element={<Inscripciones_form />} />
+        <Route path="/Inscripcion-edit/:id" element={<Inscripciones_form />} />
+      </Routes>
+    </Router>
   );
 }
 

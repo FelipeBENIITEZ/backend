@@ -7,5 +7,5 @@ router.register(r'tutores', TutorViewSet)
 router.register(r'tutor_alumnos', TutorAlumnoViewSet)
  
 urlpatterns = [
-    path('api/v1/', include(router.urls)),
+    path('', include(router.urls)),
 ]

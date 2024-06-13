@@ -1,6 +1,24 @@
-import React from "react";
-import { Inscripciones_mostrar } from '../components/Inscripciones_mostrar';
+// src/pages/Inscripciones_list.jsx
+
+import React, { useEffect, useState } from "react";
+import { getAllInscripciones } from "../api/Inscripciones.api";
+import Inscripciones_mostrar from "../components/Inscripciones_mostrar";
 
 export function Inscripciones_list() {
-  return <Inscripciones_mostrar />;
+  const [inscripciones, setInscripciones] = useState([]);
+
+  useEffect(() => {
+    async function fetchInscripciones() {
+      const response = await getAllInscripciones();
+      setInscripciones(response.data);
+    }
+
+    fetchInscripciones();
+  }, []);
+
+  return (
+    <div>
+      <Inscripciones_mostrar inscripciones={inscripciones} />
+    </div>
+  );
 }

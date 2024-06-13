@@ -1,20 +1,28 @@
-import axios from "axios";
+import axios from 'axios';
 
-const URL =
-  process.env.NODE_ENV === "production"
-    ? import.meta.env.VITE_BACKEND_URL
-    : "http://localhost:8000";
+const API_URL = 'http://localhost:8000/api/v1/inscripciones/inscripciones/';
+const API_TUTOR_ALUMNOS_URL = 'http://127.0.0.1:8000/api/v1/tutores/tutor_alumnos/';
 
-const InscripcionesApi = axios.create({
-  baseURL: `${URL}/apiinscripciones/api/v1/inscripciones`,
-});
+export const getAllInscripciones = async () => {
+  return await axios.get(`${API_URL}`);
+};
 
-export const getAllInscripciones = () => InscripcionesApi.get("/");
+export const getInscripcion = async (id) => {
+  return await axios.get(`${API_URL}/${id}`);
+};
 
-export const getInscripcion = (id) => InscripcionesApi.get(`/${id}`);
+export const createInscripcion = async (inscripcion) => {
+  return await axios.post(API_URL, inscripcion);
+};
 
-export const createInscripcion = (Inscripciones) => InscripcionesApi.post("/", Inscripciones);
+export const updateInscripcion = async (id, inscripcion) => {
+  return await axios.put(`${API_URL}/${id}`, inscripcion);
+};
 
-export const updateInscripcion = (id, Inscripciones) => InscripcionesApi.put(`/${id}/`, Inscripciones);
+export const deleteInscripcion = async (id) => {
+  return await axios.delete(`${API_URL}/${id}`);
+};
 
-export const deleteInscripcion = (id) => InscripcionesApi.delete(`/${id}`);
+export const getTutorAlumnos = async () => {
+  return await axios.get(API_TUTOR_ALUMNOS_URL);
+};
