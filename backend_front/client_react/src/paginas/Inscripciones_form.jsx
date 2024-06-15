@@ -1,33 +1,80 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { createInscripcion, deleteInscripcion, getInscripcion, updateInscripcion, getTutorAlumnos } from "../api/Inscripciones.api";
+import { createInscripcion, updateInscripcion, getInscripcion, getTutorAlumnos } from "../api/Inscripciones.api";
 import { toast } from "react-hot-toast";
-
 export function Inscripciones_form() {
     const {
         register,
         handleSubmit,
         formState: { errors },
         setValue,
+        watch
     } = useForm();
     const navigate = useNavigate();
     const params = useParams();
     const [tutorAlumnos, setTutorAlumnos] = useState([]);
 
+    const niveles = ["Escolar Básica", "Educación Media", "Nivel Inicial"];
+    const gradosInicial = ["Pre-Jardín", "Jardín", "Preescolar"];
+    const gradosEscolar = ["1º", "2º", "3º", "4º", "5º", "6º", "7º", "8º", "9º"];
+    const gradosMedia = ["1º", "2º", "3º"];
+    const ciclosEscolar = ["1º", "2º", "3º"];
+    const ciclosMedia = ["Bachillerato"];
+    const turnosEscolar = ["Mañana", "Tarde"];
+    const turnosInicial = [""];
+    const turnosMedia = [""];
+    const especializacionesMedia = ["Ciencias Básicas", "Ciencias Sociales", "BTI", "BTA"];
+
+    const nivel = watch("nivel");
+
     const onSubmit = handleSubmit(async (data) => {
-        if (params.id) {
-            await updateInscripcion(params.id, data);
-            toast.success("Inscripción Actualizada", {
-                position: "bottom-right",
-                style: {
-                    background: "#101010",
-                    color: "#fff",
-                },
-            });
-        } else {
-            await createInscripcion(data);
-            toast.success("Nueva Inscripción agregada", {
+        console.log("Submitting data:", data);  // Log the form data
+
+        try {
+            // Separar los datos para Inscripciones y Aranceles
+            const inscripcionData = {
+                tutor_alumno: data.tutor_alumno,
+                ins_contrato_fecha: data.ins_contrato_fecha,
+                ins_estado: data.ins_estado,
+                ins_periodo: data.ins_periodo,
+                nivel: data.nivel,
+                ins_habilitacion: true,  // Suponiendo que es true por defecto o se determina lógicamente
+            };
+
+            const arancelData = {
+                arancel_nivel: data.nivel,
+                arancel_ciclo: data.ciclo,
+                arancel_especializacion: data.especializacion,
+                arancel_grado: data.grado,
+                arancel_turno: data.turno,
+            };
+
+            if (params.id) {
+                await updateInscripcion(params.id, inscripcionData);
+                // Si necesitas enviar a aranceles también, realiza la llamada correspondiente
+                toast.success("Inscripción Actualizada", {
+                    position: "bottom-right",
+                    style: {
+                        background: "#101010",
+                        color: "#fff",
+                    },
+                });
+            } else {
+                await createInscripcion(inscripcionData);
+                // Si necesitas enviar a aranceles también, realiza la llamada correspondiente
+                toast.success("Nueva Inscripción agregada", {
+                    position: "bottom-right",
+                    style: {
+                        background: "#101010",
+                        color: "#fff",
+                    },
+                });
+            }
+            navigate("/Inscripciones");
+        } catch (error) {
+            console.error("Error saving inscripcion:", error);  // Log the error
+            toast.error("Error guardando la inscripción. Por favor, revisa los datos e intenta de nuevo.", {
                 position: "bottom-right",
                 style: {
                     background: "#101010",
@@ -35,8 +82,6 @@ export function Inscripciones_form() {
                 },
             });
         }
-
-        navigate("/Inscripciones");
     });
 
     useEffect(() => {
@@ -86,7 +131,7 @@ export function Inscripciones_form() {
                     className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
                 />
                 {errors.ins_contrato_fecha && <span>Este campo es requerido</span>}
-
+                    
                 <select
                     {...register("ins_estado", { required: true })}
                     className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
@@ -106,73 +151,103 @@ export function Inscripciones_form() {
                 />
                 {errors.ins_periodo && <span>Este campo es requerido</span>}
 
-                <input
-                    type="text"
-                    placeholder="Nivel"
+                <select
                     {...register("nivel", { required: true })}
                     className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
-                />
+                >
+                    <option value="">Seleccione el nivel</option>
+                    {niveles.map((nivel) => (
+                        <option key={nivel} value={nivel}>
+                            {nivel}
+                        </option>
+                    ))}
+                </select>
                 {errors.nivel && <span>Este campo es requerido</span>}
 
-                <input
-                    type="text"
-                    placeholder="Ciclo"
-                    {...register("ciclo", { required: true })}
-                    className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
-                />
-                {errors.ciclo && <span>Este campo es requerido</span>}
+                {/* Mostrar campos adicionales según el nivel seleccionado */}
+                {nivel === "Escolar Básica" && (
+                    <>
+                        <select
+                            {...register("ciclo", { required: true })}
+                            className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
+                        >
+                            <option value="">Seleccione el ciclo</option>
+                            {ciclosEscolar.map((ciclo) => (
+                                <option key={ciclo} value={ciclo}>
+                                    {ciclo}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.ciclo && <span>Este campo es requerido</span>}
 
-                <input
-                    type="text"
-                    placeholder="Curso"
-                    {...register("curso", { required: true })}
-                    className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
-                />
-                {errors.curso && <span>Este campo es requerido</span>}
+                        <select
+                            {...register("grado", { required: true })}
+                            className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
+                        >
+                            <option value="">Seleccione el grado</option>
+                            {gradosEscolar.map((grado) => (
+                                <option key={grado} value={grado}>
+                                    {grado}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.grado && <span>Este campo es requerido</span>}
 
-                <input
-                    type="text"
-                    placeholder="Turno"
-                    {...register("turno", { required: true })}
-                    className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
-                />
-                {errors.turno && <span>Este campo es requerido</span>}
+                        <select
+                            {...register("turno", { required: true })}
+                            className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
+                        >
+                            <option value="">Seleccione el turno</option>
+                            {turnosEscolar.map((turno) => (
+                                <option key={turno} value={turno}>
+                                    {turno}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.turno && <span>Este campo es requerido</span>}
+                    </>
+                )}
 
-                <input
-                    type="text"
-                    placeholder="Especialización"
-                    {...register("especializacion", { required: true })}
-                    className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
-                />
-                {errors.especializacion && <span>Este campo es requerido</span>}
+                {nivel === "Educación Media" && (
+                    <>
+                        <select
+                            {...register("ciclo", { required: true })}
+                            className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
+                        >
+                            <option value="">Seleccione el ciclo</option>
+                            {ciclosMedia.map((ciclo) => (
+                                <option key={ciclo} value={ciclo}>
+                                    {ciclo}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.ciclo && <span>Este campo es requerido</span>}
 
-                <button className="bg-indigo-500 p-3 rounded-lg block w-full mt-3">
-                    Guardar
+                        <select
+                            {...register("especializacion", { required: true })}
+                            className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
+                        >
+                            <option value="">Seleccione la especialización</option>
+                            {especializacionesMedia.map((especializacion) => (
+                                <option key={especializacion} value={especializacion}>
+                                    {especializacion}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.especializacion && <span>Este campo es requerido</span>}
+                    </>
+                )}
+
+                {/* Botón de envío */}
+                <button
+                    type="submit"
+                    className="bg-blue-500 text-white p-3 rounded-lg w-full mt-4"
+                >
+                    {params.id ? "Actualizar Inscripción" : "Agregar Inscripción"}
                 </button>
             </form>
-            {params.id && (
-                <div className="flex justify-end">
-                    <button
-                        className="bg-red-500 p-3 rounded-lg w-48 mt-3"
-                        onClick={async () => {
-                            const accepted = window.confirm("¿ESTÁS SEGURO?");
-                            if (accepted) {
-                                await deleteInscripcion(params.id);
-                                toast.success("Inscripción Eliminada", {
-                                    position: "bottom-right",
-                                    style: {
-                                        background: "#101010",
-                                        color: "#fff",
-                                    },
-                                });
-                                navigate("/Inscripciones");
-                            }
-                        }}
-                    >
-                        Eliminar
-                    </button>
-                </div>
-            )}
         </div>
     );
 }
+
+export default Inscripciones_form;

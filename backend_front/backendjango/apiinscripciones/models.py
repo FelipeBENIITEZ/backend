@@ -1,5 +1,6 @@
 from django.db import models
 from apitutores.models import *
+from apialumnos.models import *
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
 class Inscripcion(models.Model):

@@ -19,14 +19,19 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.conf import settings
- 
+from django.contrib import admin
+from django.urls import path, include
+from django.views.generic import TemplateView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/v1/inscripciones/', include('apiinscripciones.urls')),
     path('api/v1/alumnos/', include('apialumnos.urls')),
     path('api/v1/tutores/', include('apitutores.urls')),
+    path('pdf_generator/', include('pdf_generator.urls')),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
 ]
 
-#urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
  

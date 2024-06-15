@@ -9,3 +9,4 @@ class InscripcionViewSet(viewsets.ModelViewSet):
 class ArancelViewSet(viewsets.ModelViewSet):
     queryset = Arancel.objects.all()
     serializer_class = ArancelSerializer
+

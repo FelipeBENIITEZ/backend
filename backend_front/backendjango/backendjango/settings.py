@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apialumnos',
     'apitutores',
     'apiinscripciones',
+    'pdf_generator',
 ]
 
 MIDDLEWARE = [
