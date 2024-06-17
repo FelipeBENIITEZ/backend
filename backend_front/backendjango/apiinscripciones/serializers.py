@@ -6,7 +6,7 @@ from .models import Inscripcion, Arancel
 class ArancelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Arancel
-        fields = ('id', 'arancel_matricula', 'arancel_cuota', 'arancel_nivel', 'arancel_ciclo', 'arancel_grado')
+        fields = '__all__'
 
 class InscripcionSerializer(serializers.ModelSerializer):
     aranceles = ArancelSerializer(many=True, read_only=True)
@@ -14,5 +14,4 @@ class InscripcionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Inscripcion
-        fields = ('id','tutor_alumno','ins_contrato_fecha', 'ins_estado', 'ins_periodo', 'aranceles')
-
+        fields = '__all__'
