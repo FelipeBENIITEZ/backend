@@ -1,16 +1,17 @@
 from rest_framework import serializers
 from .models import Inscripcion, Arancel
-from apitutores.serializers import TutorAlumnoSerializer
+from apitutores.serializers import TutorSerializer, AlumnoSerializer
 from rest_framework import serializers
-from .models import Inscripcion, Arancel
+
+
 class ArancelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Arancel
         fields = '__all__'
 
 class InscripcionSerializer(serializers.ModelSerializer):
-    aranceles = ArancelSerializer(many=True, read_only=True)
-    tutor_alumno = TutorAlumnoSerializer()
+    alumno = AlumnoSerializer(read_only=True)
+    tutor = TutorSerializer(read_only=True)
 
     class Meta:
         model = Inscripcion

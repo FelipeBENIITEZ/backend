@@ -96,14 +96,27 @@ def generar_contrato(request, tutor_alumno_id):
     alumno_apellido = tutor_alumno.alumno.alum_ape
 
     contrato_content = [
-        ("CONTRATO DE SERVICIO EDUCATIVO", "CENTER", True),
-        (f"Entre {tutor_nombre} {tutor_apellido}, con C.I. {tutor_ci} y domiciliado en {tutor_direccion}, en calidad de tutor del estudiante {alumno_nombre} {alumno_apellido}, por una parte,", "JUSTIFY", False),
-        ("Y", "CENTER", True),
-        ("CENTRO EDUCATIVO PARAGUAY - BRASIL (CEPB), por otra parte,", "JUSTIFY", False),
-        ("Se acuerda el siguiente contrato de servicio educativo:", "JUSTIFY", False),
-        ("...", "JUSTIFY", False),  # Detalles adicionales del contrato
-        ("Firmado digitalmente,", "RIGHT", True),
-    ]
+    ("CONTRATO DE SERVICIO EDUCATIVO", "CENTER", True),
+    (f"Entre {tutor_nombre}, con C.I. {tutor_ci} y domicilio en {tutor_direccion}, en calidad de tutor legal del estudiante {alumno_nombre}, por una parte,", "JUSTIFY", False),
+    ("Y", "CENTER", True),
+    ("CENTRO EDUCATIVO PARAGUAY - BRASIL (CEPB), representado por su director/a,", "JUSTIFY", False),
+    ("Se acuerda el siguiente contrato de servicio educativo:", "JUSTIFY", False),
+    ("1. Objeto del contrato:", "JUSTIFY", True),
+    ("El Centro Educativo Paraguay - Brasil (CEPB) se compromete a proporcionar servicios educativos al estudiante, y el tutor legal se compromete a cumplir con los términos y condiciones establecidos en este contrato.", "JUSTIFY", False),
+    ("2. Duración del contrato:", "JUSTIFY", True),
+    ("Este contrato entra en vigencia a partir de la fecha de firma y tiene una duración de un año académico, renovable automáticamente a menos que cualquiera de las partes lo rescinda mediante notificación por escrito con al menos 30 días de anticipación.", "JUSTIFY", False),
+    ("3. Responsabilidades del centro educativo:", "JUSTIFY", True),
+    ("El centro educativo se compromete a proporcionar:", "JUSTIFY", False),
+    ("- Educación conforme al currículo establecido y a los estándares educativos vigentes.", "JUSTIFY", False),
+    ("- Instalaciones seguras y adecuadas para el desarrollo académico y personal del estudiante.", "JUSTIFY", False),
+    ("4. Responsabilidades del tutor legal:", "JUSTIFY", True),
+    ("El tutor legal se compromete a:", "JUSTIFY", False),
+    ("- Pagar las tarifas y cuotas escolares conforme al calendario y políticas de pago del centro educativo.", "JUSTIFY", False),
+    ("- Apoyar y fomentar la participación activa del estudiante en las actividades educativas y extracurriculares ofrecidas por el centro educativo.", "JUSTIFY", False),
+    ("5. Condiciones económicas:", "JUSTIFY", True),
+    ("Las tarifas escolares y otras condiciones económicas se detallan en el anexo adjunto a este contrato.", "JUSTIFY", False),
+    ("Firmado digitalmente,", "RIGHT", True),
+]
 
     for text, align, space in contrato_content:
         style = ParagraphStyle(name=f'{align}', alignment=eval(f'TA_{align.upper()}'))
@@ -151,6 +164,7 @@ def generar_ficha(request, tutor_alumno_id):
     ficha_content = [
         ("FICHA DE INSCRIPCIÓN", "CENTER", True),
         (f"Nombre del estudiante: {alumno_nombre} {alumno_apellido}", "JUSTIFY", False),
+        (f"Tutor: {tutor_nombre} {tutor_apellido}", "JUSTIFY", False),
         (f"Tutor: {tutor_nombre} {tutor_apellido}", "JUSTIFY", False),
         ("...", "JUSTIFY", False),  # Detalles adicionales de la ficha
         ("Firmado digitalmente,", "RIGHT", True),
